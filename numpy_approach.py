@@ -231,8 +231,8 @@ def main(X, y, Y, hyperparameters):
 	plt.show()
 
 	# Print examples until user input
-	s = ''
-	while s != 'q':
+	user_continue = ''
+	while user_continue != 'q':
 
 		random_idx = rp[i]
 
@@ -241,12 +241,13 @@ def main(X, y, Y, hyperparameters):
 
 		# Show the random input as a grayscale image 
 		plt.imshow(x.reshape(20, 20).T, cmap='gray')
-		plt.title(f'NN predicts the number is { int( p[random_idx] ) }')
+		plt.title('NN predicts the number is {:.0f} ({:.2f}%)'.
+			format(p[random_idx], 100*h[random_idx, int(p[random_idx])]))
 		plt.draw()
 		plt.pause(0.001)
 
 		# Stop when user types "q"
-		s = input('Pause - Enter to continue, q to quit:')
+		user_continue = input('Pause - Enter to continue, q to quit:')
 
 		i += 1
 
