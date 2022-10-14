@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 from utils import from_probabilities_to_label
 
@@ -47,6 +48,75 @@ def forward(X, theta1, theta2):
 	# The final prediction from the nn is the transpose of the final matrix
 	return a3.T
 
+def nn_cost_function(hyperparameters, X, Y, theta1, theta2):
+	'''
+	Function to compute the 
+	'''
+
+	# Number of training data
+	m = hyperparameters['n_data']
+
+	# We repeat the forward propagation algorithm here because we need the 
+	# z2 variable to compute the gradient
+	a1 = np.concatenate( (np.ones( (m, 1) ), X), axis=1).T
+	z2 = np.matmul(theta1, a1)
+	a2 = np.concatenate( (np.ones( (1, m) ), sigmoid(z2)), axis=0)
+	a3 = sigmoid( np.matmul(theta2, a2) )
+	h = a3.T
+
+	# Sum of errors without the bias
+	sum_t1 = np.sum(theta1[:, 1:] ** 2)
+	sum_t2 = np.sum(theta2[:, 1:] ** 2)
+
+	# Choosen cost function for this classification problem: Cross entropy
+	lam = hyperparameters['lambda']
+	J = (1 / m) * np.sum(-Y * np.log(h) - (1 - Y) * np.log(1 - h)) + (lam / (2 * m)) * (sum_t1 + sum_t2)
+
+	# Backward propagation starts here
+	d3 = (h - Y).T
+
+	# We add 1 row to z2 to compute the matrix multiplication. This row doesn't affect the
+	# final result anyway because it is erased at the end, we only add it to perform the operation
+	aux_z2 = np.concatenate((np.ones((1, m)), z2), axis=0)
+	d2 = np.matmul(theta2.T, d3) * sigmoid_grad(aux_z2)
+	d2 = d2[1:, :]
+
+	# Define the gradients of the matrices
+	theta2_grad = (1/m) * np.matmul(d3, a2.T)
+	theta1_grad = (1/m) * np.matmul(d2, a1.T)
+
+	# Finally, we add the regularization term (except for the bias, it stays the same)
+	# theta1
+	temp = theta1_grad[:, 0]
+	theta1_grad += (lam / m) * theta1
+	theta1_grad[:, 0] = temp
+	# theta2
+	temp = theta2_grad[:, 0]
+	theta2_grad += (lam / m) * theta2
+	theta2_grad[:, 0] = temp
+
+	return (J, theta1_grad, theta2_grad)
+
+def update_theta(theta, theta_grad, step):
+	'''
+	Function to update a matrix of weights followint the gradient descent algorithm
+	:param theta: the matrix with initial weights
+	:param theta_grad: the gradient of the weights in theta, computed from the cost function
+	:param step: value of the step
+	:return: the matrix with updated weights
+	'''
+
+	rows = theta.shape[0]
+	cols = theta.shape[1]
+
+	for i in range(rows):
+
+		for j in range(cols):
+
+			theta[i, j] -= step * theta_grad[i, j]
+
+	return theta
+
 def main(X, y, Y, hyperparameters):
 	'''
 	Function that contains routines to train a NN using only numpy
@@ -55,6 +125,11 @@ def main(X, y, Y, hyperparameters):
 	:param Y: matrix containing the probabilities vectors for all labels contained in y
 	:hyperparameters: dictionary to describe the characteristics of the NN
 	'''
+
+	print('=' * 36)
+	print('TRAINING NN WITH NUMPY'.center(36))
+	print('=' * 36)
+	print()
 
 	# First of all, initialize the matrices that will contain the weights of 
 	# each neuron:
@@ -102,4 +177,41 @@ def main(X, y, Y, hyperparameters):
 		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
 	print()
 
-	# Now we begin the training process.
+	# Now we begin the training process: we iterate to compute the cost function and modify the
+	# weights using the gradient at each step (gradient descent algorithm). We also want to save 
+	# the values of the cost at each iteration so we can see the training process later
+	iters = hyperparameters['iters']
+	j_history = np.zeros(iters)
+	for i in range(iters):
+
+		# Compute cost function and gradients
+		(J, theta1_grad, theta2_grad) = nn_cost_function(hyperparameters, X, Y, theta1, theta2)
+		j_history[i] = J
+
+		print('Iteration Nr. {:4}/{}: Cost= {:.6f}'.format(i+1, iters, J), end='\r')
+
+		# Now it's time to update the weights. We iterate through every weight in each matrix
+		# and add the gradient multiplied by a small value called "step"
+		step = hyperparameters['sgd_step']
+		theta1 = update_theta(theta1, theta1_grad, step)
+		theta2 = update_theta(theta2, theta2_grad, step)
+
+	print()
+
+	# Check the training process
+	print('Showing the plot for the training process (close to continue)')
+	plt.plot(np.arange(iters), j_history)
+	plt.title('Training NN with numpy')
+	plt.ylabel('Cost')
+	plt.xlabel('Iterations')
+	plt.show()
+	print()
+
+	# Finally, we can repeat the same proceadure from above to se if the prediction improved
+	h = forward(X, theta1, theta2)
+	p = from_probabilities_to_label(h, X.shape[0])
+	print('Prediction after training:')
+	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
+		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
+	print()
+	

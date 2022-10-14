@@ -33,7 +33,8 @@ def main():
 		'neurons': 25,
 		'outputs': 10,
 		'lambda': 0.01,
-		'iters': 20,
+		'iters': 1000, # We will iterate a lot because gradient descent algoritm has slow convergence
+		'sgd_step': 3.1, # Step size of for gradient descent algorithm (empyrical for this particular)
 		'n_data': 5000
 	}
 
