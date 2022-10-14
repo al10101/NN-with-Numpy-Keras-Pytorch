@@ -50,7 +50,14 @@ def forward(X, theta1, theta2):
 
 def nn_cost_function(hyperparameters, X, Y, theta1, theta2):
 	'''
-	Function to compute the 
+	Function to compute the cost function following the forward propagation algorithm, as 
+	well as the gradients for each theta matrix
+	:param hyperparameters: dictionary to describe the characteristics of the NN
+	:param X: matrix containing the input data
+	:param Y: matrix containing the probability vector from all the labels
+	:param theta1: matrix containing the weights for the hidden layer
+	:param theta2: matrix containing the weights for the output layer
+	:return: value of the cost function for the weights given, gradients of theta1, gradients of theta2
 	'''
 
 	# Number of training data
@@ -99,7 +106,7 @@ def nn_cost_function(hyperparameters, X, Y, theta1, theta2):
 
 def update_theta(theta, theta_grad, step):
 	'''
-	Function to update a matrix of weights followint the gradient descent algorithm
+	Function to update a matrix of weights following the gradient descent algorithm
 	:param theta: the matrix with initial weights
 	:param theta_grad: the gradient of the weights in theta, computed from the cost function
 	:param step: value of the step
