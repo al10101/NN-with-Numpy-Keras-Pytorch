@@ -207,11 +207,48 @@ def main(X, y, Y, hyperparameters):
 	plt.show()
 	print()
 
-	# Finally, we can repeat the same proceadure from above to se if the prediction improved
+	# Repeat the same proceadure from above to se if the prediction improved
 	h = forward(X, theta1, theta2)
 	p = from_probabilities_to_label(h, X.shape[0])
 	print('Prediction after training:')
 	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
 		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
 	print()
-	
+
+	# We can compute the accuracy of the model
+	acc = np.mean(y == p) * 100
+	print('NN accuracy: {:>5.2f}%'.format(acc))
+	print()
+
+	# To have some fun, we can predict values and show the corresponding 20x20 pixels image
+	# to judge for ourselves if the NN did a good job. For that, we shuffle the inputs so it isn't boring
+	rp = np.arange(X.shape[0])
+	np.random.shuffle(rp)
+	i = 0
+
+	# Commands to tell plt to keep the image on the screen
+	plt.ion()
+	plt.show()
+
+	# Print examples until user input
+	s = ''
+	while s != 'q':
+
+		random_idx = rp[i]
+
+		# Only 1 random data
+		x = np.array( [X[random_idx, :] ] )
+
+		# Show the random input as a grayscale image 
+		plt.imshow(x.reshape(20, 20).T, cmap='gray')
+		plt.title(f'NN predicts the number is { int( p[random_idx] ) }')
+		plt.draw()
+		plt.pause(0.001)
+
+		# Stop when user types "q"
+		s = input('Pause - Enter to continue, q to quit:')
+
+		i += 1
+
+	print()
+

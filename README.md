@@ -10,3 +10,8 @@ This repository contains code to train and use a neural network that predicts th
 
 Since the purpose of this repository is to serve as a reference to learn how classification neural networks work from different approaches, all codes commited here are commented as much as possible.Therefore, the codes are not generalized for every problem and may not be fully optimized. Again, the purpose of the repository is purely educational.
 
+For all models, the code shows the actual image of the number and the prediction
+of the NN, like the image below.
+
+![Example](prediction_example.png)
+
