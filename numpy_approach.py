@@ -104,26 +104,6 @@ def nn_cost_function(hyperparameters, X, Y, theta1, theta2):
 
 	return (J, theta1_grad, theta2_grad)
 
-def update_theta(theta, theta_grad, step):
-	'''
-	Function to update a matrix of weights following the gradient descent algorithm
-	:param theta: the matrix with initial weights
-	:param theta_grad: the gradient of the weights in theta, computed from the cost function
-	:param step: value of the step
-	:return: the matrix with updated weights
-	'''
-
-	rows = theta.shape[0]
-	cols = theta.shape[1]
-
-	for i in range(rows):
-
-		for j in range(cols):
-
-			theta[i, j] -= step * theta_grad[i, j]
-
-	return theta
-
 def main(X, y, Y, hyperparameters):
 	'''
 	Function that contains routines to train a NN using only numpy
@@ -197,11 +177,10 @@ def main(X, y, Y, hyperparameters):
 
 		print('Iteration Nr. {:4}/{}: Cost= {:.6f}'.format(i+1, iters, J), end='\r')
 
-		# Now it's time to update the weights. We iterate through every weight in each matrix
-		# and add the gradient multiplied by a small value called "step"
-		step = hyperparameters['sgd_step']
-		theta1 = update_theta(theta1, theta1_grad, step)
-		theta2 = update_theta(theta2, theta2_grad, step)
+		# Now it's time to update the weights. We update the matrices adding the gradient of each 
+		# weight multiplied by a empirical number called "step"
+		theta1 -= theta1_grad * hyperparameters['sgd_step']
+		theta2 -= theta2_grad * hyperparameters['sgd_step']
 
 	print()
 
@@ -214,17 +193,21 @@ def main(X, y, Y, hyperparameters):
 	plt.show()
 	print()
 
-	# Repeat the same proceadure from above to se if the prediction improved
+	# Repeat the same proceadure from above to compute the actual predictions
 	h = forward(X, theta1, theta2)
 	p = from_probabilities_to_label(h, X.shape[0])
+
+	# We can compute the accuracy of the model calculating the mean of the predictions that 
+	# are equal to the label
+	acc = np.mean(y == p) * 100
+	print('NN accuracy: {:>5.2f}%'.format(acc))
+	print()
+
+	# Finally, we check that the prediction is actually accurate comparing it to the previous
+	# result from the random initialization
 	print('Prediction after training:')
 	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
 		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
-	print()
-
-	# We can compute the accuracy of the model
-	acc = np.mean(y == p) * 100
-	print('NN accuracy: {:>5.2f}%'.format(acc))
 	print()
 
 	# To have some fun, we can predict values and show the corresponding 20x20 pixels image
