@@ -4,7 +4,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from utils import from_probabilities_to_label
+from utils import from_probabilities_to_label, show_random_predictions
 
 def sigmoid(z): # Sigmoid function
 	return 1.0 / (1.0 + np.exp(-z))
@@ -160,7 +160,7 @@ def main(X, y, Y, hyperparameters):
 
 	# See how the random initalization gives poor results
 	print('Prediction before training:')
-	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
+	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}%)'.
 		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
 	print()
 
@@ -206,40 +206,11 @@ def main(X, y, Y, hyperparameters):
 	# Finally, we check that the prediction is actually accurate comparing it to the previous
 	# result from the random initialization
 	print('Prediction after training:')
-	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
+	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}%)'.
 		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
 	print()
 
 	# To have some fun, we can predict values and show the corresponding 20x20 pixels image
-	# to judge for ourselves if the NN did a good job. For that, we shuffle the inputs so it isn't boring
-	rp = np.arange(X.shape[0])
-	np.random.shuffle(rp)
-	i = 0
-
-	# Commands to tell plt to keep the image on the screen
-	plt.ion()
-	plt.show()
-
-	# Print examples until user input
-	user_continue = ''
-	while user_continue != 'q':
-
-		random_idx = rp[i]
-
-		# Only 1 random data
-		x = np.array( [X[random_idx, :] ] )
-
-		# Show the random input as a grayscale image 
-		plt.imshow(x.reshape(20, 20).T, cmap='gray')
-		plt.title('NN predicts the number is {:.0f} ({:.2f}%)'.
-			format(p[random_idx], 100*h[random_idx, int(p[random_idx])]))
-		plt.draw()
-		plt.pause(0.001)
-
-		# Stop when user types "q"
-		user_continue = input('Pause - Enter to continue, q to quit:')
-
-		i += 1
-
-	print()
+	# to judge for ourselves if the NN did a good job
+	show_random_predictions(X, p, h)
 

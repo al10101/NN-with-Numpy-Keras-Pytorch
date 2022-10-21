@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 def from_labels_to_probabilities(y, m, l): 
 	'''
@@ -53,3 +54,37 @@ def from_probabilities_to_label(h, m):
 	'''
 
 	return p
+
+def show_random_predictions(X, p, h):
+
+	# Shuffle the numbers
+	rp = np.arange(X.shape[0])
+	np.random.shuffle(rp)
+
+	# Commands to tell plt to keep the image on the screen
+	plt.ion()
+	plt.show()
+
+	# Print examples until user input 
+	user_continue = ''
+	i = 0
+	while user_continue != 'q':
+
+		random_idx = rp[i]
+
+		# Only one random data per try
+		x = np.array( [X[random_idx, :] ] )
+
+		# Show the random input as a grayscale image
+		plt.imshow(x.reshape(20, 20).T, cmap='gray')
+		plt.title('NN predicts the number is {:.0f} ({:.2f}%)'.
+			format(p[random_idx], 100*h[random_idx, int(p[random_idx])]))
+		plt.draw()
+		plt.pause(0.001)
+
+		# Stop when the user types "q"
+		user_continue = input('Paused - Enter to continue, q to quit:')
+
+		i += 1
+
+	print()

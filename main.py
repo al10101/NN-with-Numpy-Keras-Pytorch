@@ -5,6 +5,7 @@ import os
 import numpy as np
 
 from numpy_approach import main as numpy_approach
+from keras_approach import main as keras_approach
 
 from utils import from_labels_to_probabilities
 
@@ -45,7 +46,12 @@ def main():
 	# ====================================================
 	# NUMPY APPROACH
 	# ====================================================
-	numpy_approach(X, y, Y, hyperparams)
+	#numpy_approach(X, y, Y, hyperparams)
+
+	# ====================================================
+	# NUMPY APPROACH
+	# ====================================================
+	keras_approach(X, y, Y, hyperparams)
 
 
 if __name__ == '__main__':
