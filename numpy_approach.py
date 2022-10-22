@@ -126,9 +126,6 @@ def main(X, y, Y, hyperparameters):
 	# The initial weights can be generated randomly, but preferably with a
 	# random generator seed to obtain reproducible results
 	np.random.seed(100)
-
-	print(f"Defining NN with {hyperparameters['hidden_layers']} hidden layer: {hyperparameters['neurons']} neurons...")
-	print()
 	
 	# There is an extra column in each matrix to account for the bias value
 	theta1 = np.random.rand(hyperparameters['neurons'], hyperparameters['inputs'] + 1)
@@ -179,8 +176,8 @@ def main(X, y, Y, hyperparameters):
 
 		# Now it's time to update the weights. We update the matrices adding the gradient of each 
 		# weight multiplied by a empirical number called "step"
-		theta1 -= theta1_grad * hyperparameters['sgd_step']
-		theta2 -= theta2_grad * hyperparameters['sgd_step']
+		theta1 -= theta1_grad * hyperparameters['gd_step']
+		theta2 -= theta2_grad * hyperparameters['gd_step']
 
 	print()
 

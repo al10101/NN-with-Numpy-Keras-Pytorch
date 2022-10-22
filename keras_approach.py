@@ -28,8 +28,11 @@ def main(X, y, Y, hyperparameters):
 	hidden_layer_size = hyperparameters['neurons']
 	num_labels = hyperparameters['outputs']
 	lam = hyperparameters['lambda']
-	iters = 100 # Since the training here is a bit different than in the Numpy approach, we only use 1th
-	# as the parameter to train
+
+	# We define the number of epochs to train the model. Since the optimizer used here (stochastic gradient descent)
+	# is faster than the optimizer used in the Numpy approach (gradient descent with step), the number of iterations
+	# needed is a little smaller
+	epochs = int(hyperparameters['iters'] / 15)
 
 	# We can generate directly the object corresponding to the hidden layer using 1 command. The
 	# layer contains 25 neurons, recieves the information from 400 input features, the activation 
@@ -54,14 +57,10 @@ def main(X, y, Y, hyperparameters):
 	model = Sequential((hidden_layer, output_layer))
 
 	# Minimaztion method and cost function are the same as in the NN with numpy code
-	sgd_opt = keras.optimizers.SGD(learning_rate=hyperparameters['sgd_step'], momentum=0.0)
+	sgd_opt = keras.optimizers.SGD(learning_rate=hyperparameters['gd_step'], momentum=0.0)
 	model.compile(optimizer=sgd_opt, loss=keras.losses.CategoricalCrossentropy())
 
-	# By this point, the model is already defined (but not trained). This means
-	# we can print a summary
-	model.summary()
-
-	# We can also check the performance of the random generated NN.or that,
+	# We can also check the performance of the random generated NN. For that,
 	# we use the forward propagation algortithm to predict some value from the input 
 	# data set. Let's choose the index=3435 (but you can modify it to your personal choice)
 	random_idx = 3435
@@ -78,7 +77,8 @@ def main(X, y, Y, hyperparameters):
 	print()
 
 	# To train it, we simply write the following command
-	model.fit(X, Y, epochs=iters)
+	print('Training (it may take a few seconds)...')
+	model.fit(X, Y, epochs=epochs, verbose=0)
 
 	# Compute the actual predictions using the same training data as input, just as a test
 	h = model.predict(X)

@@ -34,7 +34,7 @@ def from_labels_to_probabilities(y, m, l):
 
 def from_probabilities_to_label(h, m):
 	'''
-	Funcion to process the matrix (whose rows are vectors of probabilites) and assign them a digit
+	Function to process the matrix (whose rows are vectors of probabilites) and assign them a digit
 	:param h: Matrix containing m probabilities
 	:param m: the number of data
 	:return: a column vector with the corresponding labels
@@ -45,7 +45,7 @@ def from_probabilities_to_label(h, m):
 		# Choose the index that contains the max probability
 		p[i] = np.argmax(h[i, :])
 
-	# Uncomment to check a random label transformed to a probability vector:
+	# Uncomment to check a random label transformed from a probability vector:
 	'''
 	ri = np.random.randint(0, m-1)
 	print('Probabilites changed to labels. Random check:')
@@ -56,6 +56,13 @@ def from_probabilities_to_label(h, m):
 	return p
 
 def show_random_predictions(X, p, h):
+	'''
+	Function to display the 20x20 pixel form of the input in a random manner after the neuronal network is 
+	trained
+	:param X: matrix containing data with 400 features each
+	:param p: a vector containing the labels from 0 to 9
+	:param h: Matrix containing probabilities from which the labels were processed and classified
+	'''
 
 	# Shuffle the numbers
 	rp = np.arange(X.shape[0])
