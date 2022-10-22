@@ -4,7 +4,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from utils import from_probabilities_to_label, show_random_predictions
+from tools.utils import from_probabilities_to_label, show_random_predictions
 
 def sigmoid(z): # Sigmoid function
 	return 1.0 / (1.0 + np.exp(-z))

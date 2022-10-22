@@ -8,7 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data as data
 
-from utils import from_probabilities_to_label, show_random_predictions
+from tools.utils import from_probabilities_to_label, show_random_predictions
 
 class MyModel(nn.Module):
 

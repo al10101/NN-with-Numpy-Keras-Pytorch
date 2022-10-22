@@ -7,7 +7,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 from matplotlib import pyplot as plt
 
-from utils import from_probabilities_to_label, show_random_predictions
+from tools.utils import from_probabilities_to_label, show_random_predictions
 
 def main(X, y, Y, hyperparameters):
 	'''

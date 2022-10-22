@@ -6,7 +6,7 @@ import numpy as np
 
 from numpy_approach import main as numpy_approach
 
-from utils import from_labels_to_probabilities
+from tools.utils import from_labels_to_probabilities
 
 # Try to import keras and pytorch
 keras_imported = False
