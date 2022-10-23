@@ -4,7 +4,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
-from tools.utils import from_probabilities_to_label, show_random_predictions
+from tools.utils import from_probabilities_to_label, show_random_predictions, percentage
 
 def sigmoid(z): # Sigmoid function
 	return 1.0 / (1.0 + np.exp(-z))
@@ -157,8 +157,8 @@ def main(X, y, Y, hyperparameters):
 
 	# See how the random initalization gives poor results
 	print('Prediction before training:')
-	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}%)'.
-		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
+	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
+		format(y[random_idx], p[random_idx], percentage(p, h, random_idx)))
 	print()
 
 	# Now we begin the training process: we iterate to compute the cost function and modify the
@@ -203,8 +203,8 @@ def main(X, y, Y, hyperparameters):
 	# Finally, we check that the prediction is actually accurate comparing it to the previous
 	# result from the random initialization
 	print('Prediction after training:')
-	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}%)'.
-		format(y[random_idx], p[random_idx], 100*h[random_idx, int(p[random_idx])]))
+	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
+		format(y[random_idx], p[random_idx], percentage(p, h, random_idx)))
 	print()
 
 	# To have some fun, we can predict values and show the corresponding 20x20 pixels image

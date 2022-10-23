@@ -55,6 +55,28 @@ def from_probabilities_to_label(h, m):
 
 	return p
 
+def percentage(p, h, idx):
+	'''
+	Function to calculate the percentage of certainty that the model has that a prediction is correct
+	:param p: a vector containing the labels from 0 to 9
+	:param h: matrix containing probabilities from which the labels were processed and classified
+	:param idx: index of the matrix/vector of predictions to check
+	:return: percentage of certainty that the given idx is correct
+	'''
+
+	# Label - digit from 0 to 9 corresponding to the prediction of the model
+	label = p[idx]
+
+	# The probability class for the given label
+	result = h[idx, int(label)]
+
+	# The sum of the whole probability vector. The percentage is computed dividing the
+	# actual prediction by the sum of all the possible predictions, so the result is
+	# normalized
+	total = np.sum(h[idx, :])
+
+	return 100 * result / total
+
 def show_random_predictions(X, p, h):
 	'''
 	Function to display the 20x20 pixel form of the input in a random manner after the neuronal network is 
@@ -84,8 +106,8 @@ def show_random_predictions(X, p, h):
 
 		# Show the random input as a grayscale image
 		plt.imshow(x.reshape(20, 20).T, cmap='gray')
-		plt.title('NN predicts the number is {:.0f} ({:.2f}%)'.
-			format(p[random_idx], 100*h[random_idx, int(p[random_idx])]))
+		plt.title('NN predicts the number is {:.0f} ({:.2f}% sure)'.
+			format(p[random_idx], percentage(p, h, random_idx)))
 		plt.draw()
 		plt.pause(0.001)
 
