@@ -27,5 +27,5 @@ of the Neural Network, like the image below.
 
 I highly recommend [Andrew Ng's course](https://youtube.com/playlist?list=PLLssT5z_DsK-h9vYZkQkYNWcItqhlRJLN) to learn more about the technical implementation and even a bit about the mathematical derivation of neural networks. It was what I used to implement the algorithms for the Numpy approach.
 
-For the implementation of [Keras](https://keras.io) and [Pytorch](https://pytorch.org), I recommend reviewing the official documentation of the tools. If you already know how the NRs work (if you have already reviewed Andrew Ng's course), it will be easier for you to review them.
+For the implementation of [Keras](https://keras.io) and [Pytorch](https://pytorch.org), I recommend reviewing the official documentation of both tools. If you already know how a NN works (or if you have already reviewed Andrew Ng's course), it will be easier for you to understand them.
 
