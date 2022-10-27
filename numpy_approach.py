@@ -104,6 +104,30 @@ def nn_cost_function(hyperparameters, X, Y, theta1, theta2):
 
 	return (J, theta1_grad, theta2_grad)
 
+def store_as_file(theta, filename):
+
+	rows = theta.shape[0]
+	cols = theta.shape[1]
+	print(f'Storing {theta.shape} values as {filename}')
+
+	theta_arr = np.zeros(rows * cols)
+	for i in range(rows):
+		for j in range(cols):
+			ij = j * rows + i
+			theta_arr[ij] = theta[i, j]
+
+	f = open(filename, 'w')
+	max_elems = 5
+	label = []
+	for t in theta_arr:
+		label.append('{:>12.6f}'.format(t))
+		if len(label) == max_elems:
+			f.write(' '.join(label) + '\n')
+			label = []
+	if len(label) > 0:
+		f.write(' '.join(label) + '\n')
+	f.close()
+
 def main(X, y, Y, hyperparameters):
 	'''
 	Function that contains routines to train a NN using only numpy
@@ -205,6 +229,11 @@ def main(X, y, Y, hyperparameters):
 	print('Prediction after training:')
 	print('Actual label: {:.0f} | Prediction: {:.0f} ({:.2f}% sure)'.
 		format(y[random_idx], p[random_idx], percentage(p, h, random_idx)))
+	print()
+
+	# For the final act, store the matrices as files
+	store_as_file(theta1, 'tools/theta1.txt')
+	store_as_file(theta2, 'tools/theta2.txt')
 	print()
 
 	# To have some fun, we can predict values and show the corresponding 20x20 pixels image
