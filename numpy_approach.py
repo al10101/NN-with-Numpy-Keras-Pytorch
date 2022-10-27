@@ -117,6 +117,8 @@ def store_as_file(theta, filename):
 			theta_arr[ij] = theta[i, j]
 
 	f = open(filename, 'w')
+	f.write(f'{rows} {cols} \n')
+
 	max_elems = 5
 	label = []
 	for t in theta_arr:
